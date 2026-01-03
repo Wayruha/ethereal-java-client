@@ -24,6 +24,7 @@ public class EtherealConfig {
   private String webSocketHost;
   private String privateKey;
   private String publicKey;
+  private boolean isMainnet;
 
   public EtherealConfig(String publicKey, String privateKey) {
     this(publicKey, privateKey, true);
