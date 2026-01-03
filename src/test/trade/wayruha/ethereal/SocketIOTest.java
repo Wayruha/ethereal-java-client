@@ -7,6 +7,7 @@ import trade.wayruha.ethereal.dto.response.*;
 import trade.wayruha.ethereal.dto.wsresponse.WSBookDepthUpdate;
 import trade.wayruha.ethereal.dto.wsresponse.WSSubaccountLiquidationUpdate;
 import trade.wayruha.ethereal.dto.wsresponse.WSTradeFillUpdate;
+import trade.wayruha.ethereal.service.AccountService;
 import trade.wayruha.ethereal.service.MetadataService;
 import trade.wayruha.ethereal.websocket.WebSocketCallback;
 import trade.wayruha.ethereal.websocket.WebSocketClient;
@@ -19,11 +20,14 @@ public class SocketIOTest {
   final static EtherealConfig etherealConfig = new EtherealConfig(false);
   final static WebSocketClientFactory factory = new WebSocketClientFactory(etherealConfig);
   final static MetadataService metadataService = new MetadataService(etherealConfig);
+  final static AccountService accountService = new AccountService(etherealConfig);
 
-  private static final String subaccountId = "";
+  static final AllSubaccountsResponse subaccounts = accountService.getSubaccounts(null);
+  static String subaccountId;
 
   @SneakyThrows
   public static void main(String[] args) {
+    subaccountId = subaccounts.getItems().get(0).getId();
     orderBookTest();
     marketPriceTest();
     orderFillsTest();

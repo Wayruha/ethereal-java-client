@@ -14,8 +14,8 @@ public class AccountService extends ServiceBase {
     this.accountApi = createService(AccountEndpoints.class);
   }
 
-  public AllSubaccountsResponse getSubaccounts(String accountAddress, String cursor) {
-    return client.executeSync(accountApi.getSubaccounts(accountAddress, cursor));
+  public AllSubaccountsResponse getSubaccounts(String cursor) {
+    return client.executeSync(accountApi.getSubaccounts(getConfig().getPublicKey(), cursor));
   }
 
   public SubaccountInfo getSubaccountById(String subaccountId) {

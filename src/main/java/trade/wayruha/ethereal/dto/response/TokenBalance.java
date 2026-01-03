@@ -8,20 +8,20 @@ import java.math.BigDecimal;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenBalance {
-  private final String subaccountId;
-  private final String tokenId;
-  private final String tokenAddress;
-  private final String tokenName;
-  private final BigDecimal amount;
+  private String subaccountId;
+  private String tokenId;
+  private String tokenAddress;
+  private String tokenName;
+  private BigDecimal amount;
 
   /**
    * Portion of balance transferrable in native units
    */
-  private final BigDecimal available;
+  private BigDecimal available;
 
   /**
    * Portion of balance non-transferrable in native units
    */
-  private final BigDecimal totalUsed;
-  private final Long updatedAt;
+  private BigDecimal totalUsed;
+  private Long updatedAt;
 }

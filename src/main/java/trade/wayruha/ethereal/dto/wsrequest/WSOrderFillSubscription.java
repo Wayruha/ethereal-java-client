@@ -9,7 +9,7 @@ public class WSOrderFillSubscription extends WSSubscription {
   private final String subaccountId;
 
   public WSOrderFillSubscription(String subaccountId) {
-    super("BookDepth");
+    super(ORDER_FILL_EVENT_TYPE);
     this.subaccountId = subaccountId;
   }
 }

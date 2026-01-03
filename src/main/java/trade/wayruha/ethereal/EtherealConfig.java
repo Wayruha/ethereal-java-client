@@ -36,6 +36,7 @@ public class EtherealConfig {
   }
 
   public EtherealConfig(boolean isMainnet) {
+    this.isMainnet = isMainnet;
     this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
     this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
   }
