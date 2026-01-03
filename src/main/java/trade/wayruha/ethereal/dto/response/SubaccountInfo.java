@@ -9,21 +9,21 @@ public class SubaccountInfo {
   /**
    * Id representing the registered subaccount
    */
-  private final String id;
+  private String id;
 
   /**
    * Bytes32 encoded subaccount name
    */
-  private final String name;
+  private String name;
 
   /**
    * Address of the account which registered the subaccount (non-checksummed)
    */
-  private final String account;
+  private String account;
 
   /**
    * Block number this subaccount was registered on
    */
-  private final String registeredBlockNumber;
-  private final Long createdAt;
+  private String registeredBlockNumber;
+  private Long createdAt;
 }

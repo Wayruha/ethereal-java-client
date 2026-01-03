@@ -10,7 +10,7 @@ public interface TradeEndpoints {
 
   // ORDER
   @GET("v1/order")
-  Call<OrdersInfoResponse> getOrders(@Query("subaccountId") String subaccountId);
+  Call<OrdersInfoResponse> getOrders(@Query("subaccountId") String subaccountId, @Query("isWorking") Boolean isWorking);
 
   @GET("v1/order/{id}")
   Call<OrderInfo> getOrderById(@Path("id") String id);
@@ -26,7 +26,7 @@ public interface TradeEndpoints {
 
   //POSITION
   @GET("v1/position")
-  Call<PositionsInfoResponse> getPositions(@Query("subaccountId") String subaccountId);
+  Call<PositionsInfoResponse> getPositions(@Query("subaccountId") String subaccountId, @Query("open") Boolean open);
 
   @GET("v1/position/{id}")
   Call<PositionInfo> getPositionById(@Path("id") String id);

@@ -12,5 +12,5 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AllSubaccountsResponse extends PageableResponse {
   @JsonProperty("data")
-  private final List<SubaccountInfo> items;
+  private List<SubaccountInfo> items;
 }
