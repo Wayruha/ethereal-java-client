@@ -15,6 +15,7 @@ import trade.wayruha.ethereal.dto.response.*;
 import trade.wayruha.ethereal.service.endpoint.TradeEndpoints;
 import trade.wayruha.ethereal.util.TransactionSignatureUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,15 +38,29 @@ public class TradeService extends ServiceBase {
     this.cancelOrderSignatureFields = rpcConfig.getParsedSignatureTypes().get(CANCEL_ORDER_SIGNATURE_TYPE.getType());
   }
 
-  public OrdersInfoResponse getOrders(String subaccountId, boolean includeClosed) {
-    return client.executeSync(tradeApi.getOrders(subaccountId, !includeClosed ? true : null)); // invert logic for includeClosed: true -> null, false -> true
+  public PageableResponse<OrderInfo> getOrdersPageable(String subaccountId, boolean includeClosed, String cursor) {
+    return client.executeSync(tradeApi.getOrders(subaccountId, !includeClosed ? true : null, cursor)); // invert logic for includeClosed: true -> null, false -> true
+  }
+
+  public List<OrderInfo> getAllOrders(String subaccountId, boolean includeClosed) {
+    String cursor = null;
+    boolean nextCursor = false;
+
+    final List<OrderInfo> result = new ArrayList<>();
+    do {
+      final PageableResponse<OrderInfo> ordersResponse = getOrdersPageable(subaccountId, includeClosed, cursor);
+      result.addAll(ordersResponse.getItems());
+      cursor = ordersResponse.getNextCursor();
+      nextCursor = ordersResponse.isHasNext();
+    } while (nextCursor);
+    return result;
   }
 
   public OrderInfo getOrderById(String orderId) {
     return client.executeSync(tradeApi.getOrderById(orderId));
   }
 
-  public OrderFillsResponse getOrderFills(String subaccountId) {
+  public PageableResponse<OrderFill> getOrderFills(String subaccountId) {
     return client.executeSync(tradeApi.getOrderFills(subaccountId));
   }
 
@@ -61,15 +76,29 @@ public class TradeService extends ServiceBase {
     return client.executeSync(tradeApi.cancelOrders(cancelOrderRequest));
   }
 
-  public PositionsInfoResponse getPositions(String subaccountId, Boolean open) {
-    return client.executeSync(tradeApi.getPositions(subaccountId, open));
+  public PageableResponse<PositionInfo> getPositionsPageable(String subaccountId, Boolean open, String cursor) {
+    return client.executeSync(tradeApi.getPositions(subaccountId, open, cursor));
+  }
+
+  public List<PositionInfo> getAllPositions(String subaccountId, Boolean open) {
+    String cursor = null;
+    boolean nextCursor = false;
+
+    final List<PositionInfo> result = new ArrayList<>();
+    do {
+      final PageableResponse<PositionInfo> positionsResponse = getPositionsPageable(subaccountId, open, cursor);
+      result.addAll(positionsResponse.getItems());
+      cursor = positionsResponse.getNextCursor();
+      nextCursor = positionsResponse.isHasNext();
+    } while (nextCursor);
+    return result;
   }
 
   public PositionInfo getPositionById(String positionId) {
     return client.executeSync(tradeApi.getPositionById(positionId));
   }
 
-  private PlaceOrderRequest preparePlaceOrderRequest(PlaceOrderParams placeOrderParams) throws Exception {
+  private PlaceOrderRequest preparePlaceOrderRequest(PlaceOrderParams placeOrderParams) {
     final LinkedHashMap<String, Object> payloadFieldsMap = getObjectMapper().convertValue(PlaceOrderSignature.fromPlaceOrderParams(placeOrderParams), LinkedHashMap.class);
 
     HashMap<String, List<StructuredData.Entry>> types = new LinkedHashMap<>();
@@ -84,7 +113,7 @@ public class TradeService extends ServiceBase {
     return new PlaceOrderRequest(placeOrderParams, ethereumSignature.toHexSignature());
   }
 
-  private CancelOrderRequest prepareCancelOrderRequest(CancelOrderParams cancelOrderParams) throws Exception {
+  private CancelOrderRequest prepareCancelOrderRequest(CancelOrderParams cancelOrderParams) {
     final LinkedHashMap<String, Object> payloadFieldsMap = getObjectMapper().convertValue(CancelOrderSignature.fromCancelOrderParams(cancelOrderParams), LinkedHashMap.class);
 
     HashMap<String, List<StructuredData.Entry>> types = new LinkedHashMap<>();

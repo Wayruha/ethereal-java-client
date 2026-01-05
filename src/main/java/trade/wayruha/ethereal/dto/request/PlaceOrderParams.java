@@ -47,6 +47,7 @@ public class PlaceOrderParams {
   final Long signedAt;
 
   // REQUIRED FOR LIMIT ORDER
+  @JsonSerialize(using = BigDecimalAsStringSerializer.class)
   BigDecimal price;
   TimeInForce timeInForce;
   Boolean postOnly;

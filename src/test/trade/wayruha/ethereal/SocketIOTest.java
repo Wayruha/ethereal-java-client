@@ -22,7 +22,7 @@ public class SocketIOTest {
   final static MetadataService metadataService = new MetadataService(etherealConfig);
   final static AccountService accountService = new AccountService(etherealConfig);
 
-  static final AllSubaccountsResponse subaccounts = accountService.getSubaccounts(null);
+  static final PageableResponse<SubaccountInfo> subaccounts = accountService.getSubaccounts(null);
   static String subaccountId;
 
   @SneakyThrows
@@ -53,9 +53,9 @@ public class SocketIOTest {
   }
 
   public static void orderFillsTest() {
-    final Callback<OrderFillsResponse> callback = new Callback<>(new TypeReference<>() {
+    final Callback<PageableResponse<OrderFill>> callback = new Callback<>(new TypeReference<>() {
     });
-    final WebSocketClient<OrderFillsResponse> orderFillSubscription = factory.orderFillSubscription(subaccountId, callback);
+    final WebSocketClient<PageableResponse<OrderFill>> orderFillSubscription = factory.orderFillSubscription(subaccountId, callback);
   }
 
   public static void tradeFillsTest() {
@@ -66,9 +66,9 @@ public class SocketIOTest {
   }
 
   public static void orderUpdateTest() {
-    final Callback<OrdersInfoResponse> callback = new Callback<>(new TypeReference<>() {
+    final Callback<PageableResponse<OrderInfo>> callback = new Callback<>(new TypeReference<>() {
     });
-    final WebSocketClient<OrdersInfoResponse> orderUpdateSubscription = factory.orderUpdateSubscription(subaccountId, callback);
+    final WebSocketClient<PageableResponse<OrderInfo>> orderUpdateSubscription = factory.orderUpdateSubscription(subaccountId, callback);
   }
 
   public static void subaccountLiquidationTest() {

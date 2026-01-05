@@ -25,6 +25,8 @@ public class EtherealConfig {
   private String privateKey;
   private String publicKey;
   private boolean isMainnet;
+  private String subaccountName; // used in services
+  private String subaccountId; // used in services
 
   public EtherealConfig(String publicKey, String privateKey) {
     this(publicKey, privateKey, true);

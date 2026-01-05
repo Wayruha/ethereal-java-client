@@ -10,13 +10,13 @@ public interface TradeEndpoints {
 
   // ORDER
   @GET("v1/order")
-  Call<OrdersInfoResponse> getOrders(@Query("subaccountId") String subaccountId, @Query("isWorking") Boolean isWorking);
+  Call<PageableResponse<OrderInfo>> getOrders(@Query("subaccountId") String subaccountId, @Query("isWorking") Boolean isWorking, @Query("cursor") String cursor);
 
   @GET("v1/order/{id}")
   Call<OrderInfo> getOrderById(@Path("id") String id);
 
   @GET("v1/order/fill")
-  Call<OrderFillsResponse> getOrderFills(@Query("subaccountId") String subaccountId);
+  Call<PageableResponse<OrderFill>> getOrderFills(@Query("subaccountId") String subaccountId);
 
   @POST("v1/order")
   Call<PlaceOrderResponse> placeOrder(@Body PlaceOrderRequest request);
@@ -26,7 +26,7 @@ public interface TradeEndpoints {
 
   //POSITION
   @GET("v1/position")
-  Call<PositionsInfoResponse> getPositions(@Query("subaccountId") String subaccountId, @Query("open") Boolean open);
+  Call<PageableResponse<PositionInfo>> getPositions(@Query("subaccountId") String subaccountId, @Query("open") Boolean open, @Query("cursor") String cursor);
 
   @GET("v1/position/{id}")
   Call<PositionInfo> getPositionById(@Path("id") String id);

@@ -1,9 +1,9 @@
 package trade.wayruha.ethereal.service;
 
 import trade.wayruha.ethereal.EtherealConfig;
+import trade.wayruha.ethereal.dto.response.PageableResponse;
 import trade.wayruha.ethereal.dto.response.ProductInfo;
 import trade.wayruha.ethereal.dto.response.ProductMarketPriceInfo;
-import trade.wayruha.ethereal.dto.response.ProductsInfoResponse;
 import trade.wayruha.ethereal.service.endpoint.MetadataEndpoints;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class MetadataService extends ServiceBase {
     this.metadataApi = createService(MetadataEndpoints.class);
   }
 
-  public ProductsInfoResponse getProductsInfo(String cursor) {
+  public PageableResponse<ProductInfo> getProductsInfo(String cursor) {
     return client.executeSync(metadataApi.getProducts(cursor));
   }
 
@@ -31,7 +31,7 @@ public class MetadataService extends ServiceBase {
     boolean hasNext;
     final List<ProductInfo> productsResult = new ArrayList<>(List.of());
     do {
-      final ProductsInfoResponse productsInfoResponse = getProductsInfo(nextCursor);
+      final PageableResponse<ProductInfo> productsInfoResponse = getProductsInfo(nextCursor);
       nextCursor = productsInfoResponse.getNextCursor();
       hasNext = productsInfoResponse.isHasNext();
 
