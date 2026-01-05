@@ -3,10 +3,7 @@ package trade.wayruha.ethereal.websocket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Setter;
 import trade.wayruha.ethereal.EtherealConfig;
-import trade.wayruha.ethereal.dto.response.OrderFillsResponse;
-import trade.wayruha.ethereal.dto.response.OrdersInfoResponse;
-import trade.wayruha.ethereal.dto.response.ProductMarketPriceInfo;
-import trade.wayruha.ethereal.dto.response.TokenTransferResponse;
+import trade.wayruha.ethereal.dto.response.*;
 import trade.wayruha.ethereal.dto.wsrequest.*;
 import trade.wayruha.ethereal.dto.wsresponse.WSBookDepthUpdate;
 import trade.wayruha.ethereal.dto.wsresponse.WSSubaccountLiquidationUpdate;
@@ -55,9 +52,9 @@ public class WebSocketClientFactory {
     return client;
   }
 
-  public WebSocketClient<OrderFillsResponse> orderFillSubscription(String subaccountId, WebSocketCallback<OrderFillsResponse> callback) {
+  public WebSocketClient<PageableResponse<OrderFill>> orderFillSubscription(String subaccountId, WebSocketCallback<PageableResponse<OrderFill>> callback) {
     final WSOrderFillSubscription channel = new WSOrderFillSubscription(subaccountId);
-    final WebSocketClient<OrderFillsResponse> client = new WebSocketClient<>(config, objectMapper, callback, ORDER_FILL_EVENT_TYPE);
+    final WebSocketClient<PageableResponse<OrderFill>> client = new WebSocketClient<>(config, objectMapper, callback, ORDER_FILL_EVENT_TYPE);
     client.connect(List.of(channel));
     return client;
   }
@@ -71,9 +68,9 @@ public class WebSocketClientFactory {
     return client;
   }
 
-  public WebSocketClient<OrdersInfoResponse> orderUpdateSubscription(String subaccountId, WebSocketCallback<OrdersInfoResponse> callback) {
+  public WebSocketClient<PageableResponse<OrderInfo>> orderUpdateSubscription(String subaccountId, WebSocketCallback<PageableResponse<OrderInfo>> callback) {
     final WSOrderUpdateSubscription channel = new WSOrderUpdateSubscription(subaccountId);
-    final WebSocketClient<OrdersInfoResponse> client = new WebSocketClient<>(config, objectMapper, callback, ORDER_UPDATE_EVENT_TYPE);
+    final WebSocketClient<PageableResponse<OrderInfo>> client = new WebSocketClient<>(config, objectMapper, callback, ORDER_UPDATE_EVENT_TYPE);
     client.connect(List.of(channel));
     return client;
   }

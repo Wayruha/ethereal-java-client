@@ -1,10 +1,13 @@
 package trade.wayruha.ethereal.service;
 
 import trade.wayruha.ethereal.EtherealConfig;
-import trade.wayruha.ethereal.dto.response.AllSubaccountsResponse;
-import trade.wayruha.ethereal.dto.response.SubaccountBalanceResponse;
+import trade.wayruha.ethereal.dto.response.PageableResponse;
 import trade.wayruha.ethereal.dto.response.SubaccountInfo;
+import trade.wayruha.ethereal.dto.response.TokenBalance;
 import trade.wayruha.ethereal.service.endpoint.AccountEndpoints;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountService extends ServiceBase {
   private final AccountEndpoints accountApi;
@@ -14,7 +17,7 @@ public class AccountService extends ServiceBase {
     this.accountApi = createService(AccountEndpoints.class);
   }
 
-  public AllSubaccountsResponse getSubaccounts(String cursor) {
+  public PageableResponse<SubaccountInfo> getSubaccounts(String cursor) {
     return client.executeSync(accountApi.getSubaccounts(getConfig().getPublicKey(), cursor));
   }
 
@@ -22,7 +25,21 @@ public class AccountService extends ServiceBase {
     return client.executeSync(accountApi.getSubaccountById(subaccountId));
   }
 
-  public SubaccountBalanceResponse getSubaccountBalance(String subaccountId) {
-    return client.executeSync(accountApi.getSubaccountBalance(subaccountId));
+  public PageableResponse<TokenBalance> getSubaccountBalance(String subaccountId, String cursor) {
+    return client.executeSync(accountApi.getSubaccountBalance(subaccountId, cursor));
+  }
+
+  public List<TokenBalance> getAllSubaccountBalances(String subaccountId) {
+    String cursor = null;
+    boolean nextCursor = false;
+
+    final List<TokenBalance> result = new ArrayList<>();
+    do {
+      final PageableResponse<TokenBalance> balance = getSubaccountBalance(subaccountId, cursor);
+      result.addAll(balance.getItems());
+      cursor = balance.getNextCursor();
+      nextCursor = balance.isHasNext();
+    } while (nextCursor);
+    return result;
   }
 }

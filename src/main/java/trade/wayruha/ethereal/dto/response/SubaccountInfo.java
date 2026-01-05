@@ -7,7 +7,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubaccountInfo {
   /**
-   * Id representing the registered subaccount
+   * Id representing the registered subaccount,
+   * UUID
    */
   private String id;
 

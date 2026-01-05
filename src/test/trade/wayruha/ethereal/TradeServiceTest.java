@@ -30,7 +30,7 @@ public class TradeServiceTest {
     accountService = new AccountService(etherealConfig);
     tradeService = new TradeService(etherealConfig, rpcConfig);
 
-    final AllSubaccountsResponse subaccounts = accountService.getSubaccounts(null);
+    final PageableResponse<SubaccountInfo> subaccounts = accountService.getSubaccounts(null);
 
     sender = etherealConfig.getPublicKey();
     subaccountUUID = subaccounts.getItems().get(0).getId();
@@ -43,7 +43,7 @@ public class TradeServiceTest {
     cancelOrder();
     getOrderFills();
     Thread.sleep(5000);
-    final PositionsInfoResponse positions = getPositions();
+    final PageableResponse<PositionInfo> positions = getPositions();
     if (!positions.getItems().isEmpty())
       getPositionById(positions.getItems().get(0).getId());
   }
@@ -100,7 +100,7 @@ public class TradeServiceTest {
   }
 
   private static void getOrders() {
-    final OrdersInfoResponse orders = tradeService.getOrders(subaccountUUID, false);
+    final PageableResponse<OrderInfo> orders = tradeService.getOrdersPageable(subaccountUUID, false, null);
     System.out.println(orders);
   }
 
@@ -110,7 +110,7 @@ public class TradeServiceTest {
   }
 
   private static void getOrderFills() {
-    final OrderFillsResponse orderFills = tradeService.getOrderFills(subaccountUUID);
+    final PageableResponse<OrderFill> orderFills = tradeService.getOrderFills(subaccountUUID);
     System.out.println(orderFills);
   }
 
@@ -123,16 +123,16 @@ public class TradeServiceTest {
         subaccount,
         sender,
         nonce,
-        null,
-        List.of(String.valueOf(CLIENT_ORDER_ID))
+        List.of("b3993636-7d6f-4c40-ae4a-b541dc6fe6bf"),
+        null
     );
     final CancelOrdersResponse cancelOrdersResponse = tradeService.cancelOrder(cancelOrderParams);
     System.out.println(cancelOrdersResponse);
     assert cancelOrdersResponse != null;
   }
 
-  private static PositionsInfoResponse getPositions() {
-    final PositionsInfoResponse positions = tradeService.getPositions(subaccountUUID, true);
+  private static PageableResponse<PositionInfo> getPositions() {
+    final PageableResponse<PositionInfo> positions = tradeService.getPositionsPageable(subaccountUUID, true, null);
     System.out.println(positions);
     return positions;
   }
