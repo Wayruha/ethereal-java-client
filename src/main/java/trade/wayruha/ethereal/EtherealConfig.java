@@ -38,6 +38,13 @@ public class EtherealConfig {
     this.privateKey = privateKey;
   }
 
+  public EtherealConfig(String publicKey, String privateKey, String subAccount, boolean isMainnet) {
+    this(isMainnet);
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
+    this.subaccountName = subAccount;
+  }
+
   public EtherealConfig(boolean isMainnet) {
     this.isMainnet = isMainnet;
     this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
