@@ -17,10 +17,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SocketIOTest {
-  final static EtherealConfig etherealConfig = new EtherealConfig(false);
-  final static WebSocketClientFactory factory = new WebSocketClientFactory(etherealConfig);
-  final static MetadataService metadataService = new MetadataService(etherealConfig);
-  final static AccountService accountService = new AccountService(etherealConfig);
+  static final String PUB_KEY = "";
+  static final String SECRET_KEY = "";
+
+  static final EtherealConfig etherealConfig = new EtherealConfig(PUB_KEY, SECRET_KEY,false);
+  static final WebSocketClientFactory factory = new WebSocketClientFactory(etherealConfig);
+  static final MetadataService metadataService = new MetadataService(etherealConfig);
+  static final AccountService accountService = new AccountService(etherealConfig);
 
   static final PageableResponse<SubaccountInfo> subaccounts = accountService.getSubaccounts(null);
   static String subaccountId;
@@ -39,9 +42,9 @@ public class SocketIOTest {
 
   public static void orderBookTest() {
     final List<ProductInfo> productsInfo = metadataService.getAllProductsInfo();
-    final Callback<WSBookDepthUpdate> callback = new Callback<>(new TypeReference<>() {
-    });
-    final WebSocketClient<WSBookDepthUpdate> orderBookSubscription = factory.orderBookSubscription(productsInfo.stream().map(ProductInfo::getId).collect(Collectors.toList()), callback);
+    final Callback<WSBookDepthUpdate> callback = new Callback<>(new TypeReference<>() {});
+    final List<String> productIds = productsInfo.stream().map(ProductInfo::getId).collect(Collectors.toList());
+    final WebSocketClient<WSBookDepthUpdate> orderBookSubscription = factory.orderBookSubscription(productIds, callback);
     System.out.println(orderBookSubscription.reConnect());
   }
 
