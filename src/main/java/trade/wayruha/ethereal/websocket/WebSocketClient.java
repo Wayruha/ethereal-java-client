@@ -64,35 +64,19 @@ public class WebSocketClient<T> {
 
     socket = IO.socket(serverUri, options);
 
-    socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-      @Override
-      public void call(Object... args) {
-        log.info("{} Connected!", logPrefix);
-        connectionLatch.countDown();
-      }
+    socket.on(Socket.EVENT_CONNECT, args -> {
+      log.info("{} Connected!", logPrefix);
+      connectionLatch.countDown();
     });
 
-    socket.on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
-      @Override
-      public void call(Object... args) {
-        log.error("{} Connection failed: {}", logPrefix, Arrays.toString(args));
-        connectionLatch.countDown();
-      }
+    socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
+      log.error("{} Connection failed: {}", logPrefix, Arrays.toString(args));
+      connectionLatch.countDown();
     });
 
-    socket.on(event, new Emitter.Listener() {
-      @Override
-      public void call(Object... args) {
-        handleMessage(args[0].toString());
-      }
-    });
+    socket.on(event, args -> handleMessage(args[0].toString()));
 
-    socket.on("exception", new Emitter.Listener() {
-      @Override
-      public void call(Object... args) {
-        log.error("{} Server exception: {}", logPrefix, Arrays.toString(args));
-      }
-    });
+    socket.on("exception", args -> log.error("{} Server exception: {}", logPrefix, Arrays.toString(args)));
 
     socket.connect();
 

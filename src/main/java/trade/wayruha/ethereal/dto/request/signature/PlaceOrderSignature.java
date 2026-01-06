@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 @JsonPropertyOrder({"sender", "subaccount", "quantity", "price", "reduceOnly", "side", "engineType", "productId", "nonce", "signedAt"})
 @AllArgsConstructor
 public class PlaceOrderSignature {
+  private static final BigDecimal multiplicand = new BigDecimal("1000000000"); //1_000_000_000
+
   String subaccount; // Bytes32 encoded subaccount name (0x prefix, zero padded)
   String sender; // Address of account
   long nonce; // Message nonce timestamp (nanoseconds since Unix Epoch)
@@ -23,7 +25,6 @@ public class PlaceOrderSignature {
   Boolean reduceOnly = false;
 
   public static PlaceOrderSignature fromPlaceOrderParams(PlaceOrderParams placeOrderParams) {
-    final BigDecimal multiplicand = new BigDecimal("1000000000"); //1_000_000_000
     return new PlaceOrderSignature(
         placeOrderParams.getSubaccount(),
         placeOrderParams.getSender(),
@@ -32,7 +33,7 @@ public class PlaceOrderSignature {
             .multiply(multiplicand)
             .toBigIntegerExact()
             .toString(),
-        (placeOrderParams.getPrice() != null ? placeOrderParams.getPrice() : BigDecimal.ZERO)
+        (placeOrderParams.getPrice() != null ? placeOrderParams.getPrice() : java.math.BigDecimal.ZERO)
             .multiply(multiplicand)
             .toBigIntegerExact()
             .toString(),

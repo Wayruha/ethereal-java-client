@@ -43,7 +43,6 @@ public class ApiClient {
   }
 
   public <T> T executeSync(Call<T> call) {
-    final String rawRequestData = logRequestBody(call);
     try {
       final Response<T> response = call.execute();
       final T body = response.body();
@@ -54,6 +53,7 @@ public class ApiClient {
       String errorMessage = nonNull(errBody) ? errBody.string() : API_CLIENT_ERROR_MESSAGE_PARSE_EXCEPTION;
       throw new EtherealException(response.code() + ": " + errorMessage);
     } catch (Exception e) {
+      final String rawRequestData = logRequestBody(call);
       log.error("Request failed. Request data: {},  response: {} ", rawRequestData, call.request(), e);
       throw new EtherealException(e.getMessage(), e);
     }
