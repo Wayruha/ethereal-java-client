@@ -13,9 +13,10 @@ import trade.wayruha.ethereal.service.TradeService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Random;
 
 public class TradeServiceTest {
-  private static final Long CLIENT_ORDER_ID = Math.abs(new java.util.Random().nextLong());
+  private static final Long CLIENT_ORDER_ID = Math.abs(new Random().nextLong());
   private static String subaccount;
   private static String subaccountUUID;
   private static String sender;
